@@ -4,7 +4,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { useStore, Product, CartItem } from '../data/store';
 import { formatCurrency } from '../utils/statistics';
 import { downloadInvoiceAsPDF, printInvoice } from '../utils/invoice';
@@ -57,11 +57,12 @@ const POSPage: React.FC = () => {
       return;
     }
     
-    // تعديل هنا لإصلاح خطأ TypeScript
     const saleResult = completeSale();
-    setCurrentSale(saleResult);
-    setShowCompleteSaleDialog(true);
-    toast.success('تمت عملية البيع بنجاح');
+    if (saleResult) {
+      setCurrentSale(saleResult);
+      setShowCompleteSaleDialog(true);
+      toast.success('تمت عملية البيع بنجاح');
+    }
   };
   
   // Handle increase/decrease quantity
@@ -95,26 +96,28 @@ const POSPage: React.FC = () => {
       <div className="flex flex-col lg:flex-row gap-4">
         {/* Products Section */}
         <div className="w-full lg:w-2/3 space-y-4">
-          <Card className="libyan-border">
+          <Card className="libyan-border overflow-hidden">
             <CardHeader className="libyan-header pb-2">
-              <div className="flex flex-col md:flex-row justify-between gap-4">
-                <CardTitle className="text-white">المنتجات</CardTitle>
+              <CardTitle className="text-white">المنتجات</CardTitle>
+              <div className="relative w-full max-w-xs">
                 <Input
-                  className="max-w-xs bg-white/90"
+                  className="pr-10 bg-white/90 shadow-sm"
                   placeholder="بحث عن منتج..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
+                <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                  <i className="bi bi-search text-gray-400"></i>
+                </div>
               </div>
             </CardHeader>
             <CardContent className="p-0">
               <Tabs defaultValue="all" className="w-full">
-                <div className="border-b px-6 bg-secondary/10">
+                <div className="border-b px-6 bg-secondary/10 overflow-x-auto">
                   <TabsList className="h-12">
                     <TabsTrigger
                       value="all"
                       onClick={() => setActiveCategory('all')}
-                      className="rounded-none data-[state=active]:border-b-2 data-[state=active]:border-secondary"
                     >
                       الكل
                     </TabsTrigger>
@@ -124,7 +127,6 @@ const POSPage: React.FC = () => {
                         key={category.id}
                         value={category.id}
                         onClick={() => setActiveCategory(category.id)}
-                        className="rounded-none data-[state=active]:border-b-2 data-[state=active]:border-secondary"
                       >
                         {category.name}
                       </TabsTrigger>
@@ -138,7 +140,7 @@ const POSPage: React.FC = () => {
                       filteredProducts.map((product) => (
                         <Card
                           key={product.id}
-                          className={`cursor-pointer hover:shadow-md transition-shadow ${
+                          className={`product-card cursor-pointer ${
                             product.stock <= 0 ? 'opacity-50' : ''
                           }`}
                           onClick={() => {
@@ -150,35 +152,37 @@ const POSPage: React.FC = () => {
                             }
                           }}
                         >
-                          <CardContent className="p-4 text-center">
-                            <div className="aspect-square bg-gray-100 rounded-md flex items-center justify-center mb-2">
-                              {product.imageUrl ? (
-                                <img
-                                  src={product.imageUrl}
-                                  alt={product.name}
-                                  className="h-full w-full object-cover rounded-md"
-                                />
-                              ) : (
-                                <i className="bi bi-box text-4xl text-gray-400"></i>
-                              )}
-                            </div>
-                            <div className="text-sm font-medium truncate">
+                          <div className="product-image bg-gray-100 flex items-center justify-center">
+                            {product.imageUrl ? (
+                              <img
+                                src={product.imageUrl}
+                                alt={product.name}
+                                className="h-full w-full object-cover"
+                              />
+                            ) : (
+                              <i className="bi bi-box text-4xl text-gray-400"></i>
+                            )}
+                          </div>
+                          <div className="product-info">
+                            <div className="text-base font-medium truncate">
                               {product.name}
                             </div>
-                            <div className="text-sm text-gray-500 truncate">
+                            <div className="text-xs text-gray-500 truncate mb-2">
                               {product.id}
                             </div>
-                            <div className="mt-1 font-bold text-primary">
-                              {formatCurrency(product.price)}
+                            <div className="flex justify-between items-center">
+                              <div className="font-bold text-primary">
+                                {formatCurrency(product.price)}
+                              </div>
+                              <div className="text-xs">
+                                {product.stock > 0 ? (
+                                  <span className="bg-green-100 text-green-800 px-2 py-1 rounded-full">المتاح: {product.stock}</span>
+                                ) : (
+                                  <span className="bg-red-100 text-red-800 px-2 py-1 rounded-full">غير متوفر</span>
+                                )}
+                              </div>
                             </div>
-                            <div className="text-xs mt-1">
-                              {product.stock > 0 ? (
-                                <span className="text-green-600">متوفر: {product.stock}</span>
-                              ) : (
-                                <span className="text-red-600">غير متوفر</span>
-                              )}
-                            </div>
-                          </CardContent>
+                          </div>
                         </Card>
                       ))
                     ) : (
@@ -196,7 +200,7 @@ const POSPage: React.FC = () => {
                         filteredProducts.map((product) => (
                           <Card
                             key={product.id}
-                            className={`cursor-pointer hover:shadow-md transition-shadow ${
+                            className={`product-card cursor-pointer ${
                               product.stock <= 0 ? 'opacity-50' : ''
                             }`}
                             onClick={() => {
@@ -208,35 +212,37 @@ const POSPage: React.FC = () => {
                               }
                             }}
                           >
-                            <CardContent className="p-4 text-center">
-                              <div className="aspect-square bg-gray-100 rounded-md flex items-center justify-center mb-2">
-                                {product.imageUrl ? (
-                                  <img
-                                    src={product.imageUrl}
-                                    alt={product.name}
-                                    className="h-full w-full object-cover rounded-md"
-                                  />
-                                ) : (
-                                  <i className="bi bi-box text-4xl text-gray-400"></i>
-                                )}
-                              </div>
-                              <div className="text-sm font-medium truncate">
+                            <div className="product-image bg-gray-100 flex items-center justify-center">
+                              {product.imageUrl ? (
+                                <img
+                                  src={product.imageUrl}
+                                  alt={product.name}
+                                  className="h-full w-full object-cover"
+                                />
+                              ) : (
+                                <i className="bi bi-box text-4xl text-gray-400"></i>
+                              )}
+                            </div>
+                            <div className="product-info">
+                              <div className="text-base font-medium truncate">
                                 {product.name}
                               </div>
-                              <div className="text-sm text-gray-500 truncate">
+                              <div className="text-xs text-gray-500 truncate mb-2">
                                 {product.id}
                               </div>
-                              <div className="mt-1 font-bold text-primary">
-                                {formatCurrency(product.price)}
+                              <div className="flex justify-between items-center">
+                                <div className="font-bold text-primary">
+                                  {formatCurrency(product.price)}
+                                </div>
+                                <div className="text-xs">
+                                  {product.stock > 0 ? (
+                                    <span className="bg-green-100 text-green-800 px-2 py-1 rounded-full">المتاح: {product.stock}</span>
+                                  ) : (
+                                    <span className="bg-red-100 text-red-800 px-2 py-1 rounded-full">غير متوفر</span>
+                                  )}
+                                </div>
                               </div>
-                              <div className="text-xs mt-1">
-                                {product.stock > 0 ? (
-                                  <span className="text-green-600">متوفر: {product.stock}</span>
-                                ) : (
-                                  <span className="text-red-600">غير متوفر</span>
-                                )}
-                              </div>
-                            </CardContent>
+                            </div>
                           </Card>
                         ))
                       ) : (
@@ -254,30 +260,30 @@ const POSPage: React.FC = () => {
         
         {/* Cart Section */}
         <div className="w-full lg:w-1/3">
-          <Card className="sticky top-6 libyan-border">
+          <Card className="sticky top-6 libyan-border overflow-hidden">
             <CardHeader className="libyan-header">
               <CardTitle className="flex justify-between items-center text-white">
                 <span>سلة المشتريات</span>
-                <span className="text-sm text-white/80">
+                <span className="text-sm bg-white/20 px-2 py-1 rounded-full">
                   {cart.length} منتج
                 </span>
               </CardTitle>
             </CardHeader>
-            <CardContent className="max-h-[400px] overflow-y-auto">
+            <CardContent className="max-h-[400px] overflow-y-auto py-4">
               {cart.length > 0 ? (
                 <div className="space-y-4">
                   {cart.map((item) => (
                     <div
                       key={item.product.id}
-                      className="flex justify-between items-center border-b border-secondary/30 pb-4"
+                      className="flex justify-between bg-gray-50 items-center p-3 rounded-lg border border-gray-100 hover:shadow-sm transition-all"
                     >
                       <div className="flex items-center">
-                        <div className="w-12 h-12 bg-gray-100 rounded-md flex items-center justify-center ml-3">
+                        <div className="w-14 h-14 bg-gray-100 rounded-md flex items-center justify-center ml-3 overflow-hidden">
                           {item.product.imageUrl ? (
                             <img
                               src={item.product.imageUrl}
                               alt={item.product.name}
-                              className="h-full w-full object-cover rounded-md"
+                              className="h-full w-full object-cover"
                             />
                           ) : (
                             <i className="bi bi-box text-xl text-gray-400"></i>
@@ -295,18 +301,18 @@ const POSPage: React.FC = () => {
                         <Button
                           size="icon"
                           variant="outline"
-                          className="h-8 w-8"
+                          className="h-8 w-8 rounded-full"
                           onClick={() => handleUpdateQuantity(item, item.quantity - 1)}
                         >
                           <i className="bi bi-dash"></i>
                         </Button>
                         
-                        <div className="w-10 text-center">{item.quantity}</div>
+                        <div className="w-8 text-center font-medium">{item.quantity}</div>
                         
                         <Button
                           size="icon"
                           variant="outline"
-                          className="h-8 w-8"
+                          className="h-8 w-8 rounded-full"
                           onClick={() => handleUpdateQuantity(item, item.quantity + 1)}
                         >
                           <i className="bi bi-plus"></i>
@@ -317,12 +323,12 @@ const POSPage: React.FC = () => {
                 </div>
               ) : (
                 <div className="text-center py-10 text-gray-500">
-                  <i className="bi bi-cart text-4xl mb-2"></i>
+                  <i className="bi bi-cart text-4xl mb-2 opacity-50"></i>
                   <p>السلة فارغة</p>
                 </div>
               )}
             </CardContent>
-            <CardFooter className="flex flex-col space-y-4 bg-secondary/10 rounded-b-md p-4">
+            <CardFooter className="flex flex-col space-y-4 bg-secondary/10 rounded-b-lg p-4">
               <div className="w-full flex justify-between text-lg font-bold">
                 <span>المجموع:</span>
                 <span className="text-primary">{formatCurrency(cartTotal)}</span>

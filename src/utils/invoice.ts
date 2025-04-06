@@ -29,7 +29,7 @@ export const generateInvoiceHTML = (sale: Sale, businessInfo: any): string => {
         <div>
           <p><strong>رقم الفاتورة:</strong> ${sale.invoiceNumber}</p>
           <p><strong>التاريخ:</strong> ${formatDate(sale.date)}</p>
-          ${businessInfo.taxId ? `<p><strong>الرقم الضريبي:</strong> ${businessInfo.taxId}</p>` : ''}
+          ${businessInfo.taxId && businessInfo.showTaxId ? `<p><strong>الرقم الضريبي:</strong> ${businessInfo.taxId}</p>` : ''}
         </div>
       </div>
       

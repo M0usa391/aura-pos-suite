@@ -1,4 +1,3 @@
-
 import { Sale, Product } from '../data/store';
 
 // Get sales for a specific day
@@ -87,7 +86,7 @@ export const getLowStockProducts = (products: Product[]): Product[] => {
   return products.filter((product) => product.stock <= product.minStock);
 };
 
-// Format currency - تغيير العملة إلى الدينار الليبي
+// تغيير العملة إلى الدينار الليبي
 export const formatCurrency = (amount: number): string => {
   return new Intl.NumberFormat('ar-LY', {
     style: 'currency',
