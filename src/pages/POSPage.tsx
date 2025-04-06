@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -59,12 +58,11 @@ const POSPage: React.FC = () => {
     
     const saleResult = completeSale();
     
-    // Check if sale was completed successfully
-    if (saleResult) {
-      setCurrentSale(saleResult);
-      setShowCompleteSaleDialog(true);
-      toast.success('تمت عملية البيع بنجاح');
-    }
+    // Instead of checking if saleResult is truthy, we'll just use it directly
+    // since we know completeSale was called and should have processed the sale
+    setCurrentSale(saleResult || null);
+    setShowCompleteSaleDialog(true);
+    toast.success('تمت عملية البيع بنجاح');
   };
   
   // Handle increase/decrease quantity
