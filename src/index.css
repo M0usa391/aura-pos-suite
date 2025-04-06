@@ -17,24 +17,24 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    --primary: 221 83% 25%;
+    --primary: 145 63% 30%;
     --primary-foreground: 210 40% 98%;
 
-    --secondary: 43 74% 52%;
+    --secondary: 28 74% 52%;
     --secondary-foreground: 222.2 47.4% 11.2%;
 
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
 
-    --accent: 44 78% 58%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 215 95% 36%;
+    --accent-foreground: 210 40% 98%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 43 74% 52%;
+    --ring: 28 74% 52%;
 
     --radius: 0.5rem;
 
@@ -49,25 +49,25 @@
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
+    --background: 222.2 26% 18%;
     --foreground: 210 40% 98%;
 
-    --card: 222.2 84% 4.9%;
+    --card: 222.2 26% 18%;
     --card-foreground: 210 40% 98%;
 
-    --popover: 222.2 84% 4.9%;
+    --popover: 222.2 26% 18%;
     --popover-foreground: 210 40% 98%;
 
-    --primary: 217.2 91.2% 59.8%;
-    --primary-foreground: 222.2 47.4% 11.2%;
+    --primary: 143 70% 28%;
+    --primary-foreground: 210 40% 98%;
 
-    --secondary: 43 74% 52%;
+    --secondary: 28 74% 52%;
     --secondary-foreground: 210 40% 98%;
 
     --muted: 217.2 32.6% 17.5%;
     --muted-foreground: 215 20.2% 65.1%;
 
-    --accent: 44 78% 58%;
+    --accent: 215 95% 36%;
     --accent-foreground: 210 40% 98%;
 
     --destructive: 0 62.8% 30.6%;
@@ -75,7 +75,7 @@
 
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
+    --ring: 28 74% 52%;
   }
 }
 
@@ -100,11 +100,11 @@
 
 @layer components {
   .nav-item {
-    @apply flex flex-col items-center justify-center px-4 py-2 text-gray-500 hover:text-aura-darkBlue transition-colors duration-200;
+    @apply flex flex-col items-center justify-center px-4 py-2 text-gray-500 hover:text-accent transition-colors duration-200;
   }
 
   .nav-item.active {
-    @apply text-aura-gold;
+    @apply text-secondary;
   }
   
   .elegant-card {
@@ -112,18 +112,41 @@
   }
   
   .elegant-input {
-    @apply border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-aura-gold focus:border-transparent w-full;
+    @apply border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent w-full;
   }
   
   .elegant-button {
-    @apply px-4 py-2 bg-aura-gold text-white rounded-md hover:bg-opacity-90 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-aura-gold focus:ring-opacity-50;
+    @apply px-4 py-2 bg-secondary text-white rounded-md hover:bg-opacity-90 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-secondary focus:ring-opacity-50;
   }
 
   .elegant-button-secondary {
-    @apply px-4 py-2 bg-aura-darkBlue text-white rounded-md hover:bg-opacity-90 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-aura-darkBlue focus:ring-opacity-50;
+    @apply px-4 py-2 bg-primary text-white rounded-md hover:bg-opacity-90 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50;
   }
   
   .elegant-button-outline {
-    @apply px-4 py-2 border border-aura-gold text-aura-gold rounded-md hover:bg-aura-lightGold transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-aura-gold focus:ring-opacity-50;
+    @apply px-4 py-2 border border-secondary text-secondary rounded-md hover:bg-secondary/10 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-secondary focus:ring-opacity-50;
+  }
+
+  /* أنماط ليبية جديدة */
+  .libyan-pattern {
+    background-color: #f8f7f2;
+    background-image: 
+      radial-gradient(#064420 0.5px, transparent 0.5px),
+      radial-gradient(#e5a01c 0.5px, #f8f7f2 0.5px);
+    background-size: 20px 20px;
+    background-position: 0 0, 10px 10px;
+  }
+  
+  .libyan-border {
+    @apply border-2 border-secondary rounded-md p-4;
+    background-image: repeating-linear-gradient(45deg, #064420 0, #064420 1px, transparent 0, transparent 50%);
+    background-size: 10px 10px;
+    background-position: 0 0;
+  }
+
+  .libyan-header {
+    @apply bg-primary text-white py-3 px-4 rounded-t-md;
+    background-image: linear-gradient(45deg, rgba(229, 160, 28, 0.2) 25%, transparent 25%, transparent 50%, rgba(229, 160, 28, 0.2) 50%, rgba(229, 160, 28, 0.2) 75%, transparent 75%);
+    background-size: 10px 10px;
   }
 }

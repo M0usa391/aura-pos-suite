@@ -87,17 +87,19 @@ export const getLowStockProducts = (products: Product[]): Product[] => {
   return products.filter((product) => product.stock <= product.minStock);
 };
 
-// Format currency
+// Format currency - تغيير العملة إلى الدينار الليبي
 export const formatCurrency = (amount: number): string => {
-  return new Intl.NumberFormat('ar-SA', {
+  return new Intl.NumberFormat('ar-LY', {
     style: 'currency',
-    currency: 'SAR',
+    currency: 'LYD',
+    maximumFractionDigits: 3,
+    minimumFractionDigits: 3
   }).format(amount);
 };
 
 // Format date
 export const formatDate = (dateString: string): string => {
-  return new Intl.DateTimeFormat('ar-SA', {
+  return new Intl.DateTimeFormat('ar-LY', {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
@@ -106,7 +108,7 @@ export const formatDate = (dateString: string): string => {
 
 // Format short date
 export const formatShortDate = (dateString: string): string => {
-  return new Intl.DateTimeFormat('ar-SA', {
+  return new Intl.DateTimeFormat('ar-LY', {
     year: 'numeric',
     month: '2-digit',
     day: '2-digit',

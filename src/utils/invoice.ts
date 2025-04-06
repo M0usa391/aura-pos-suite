@@ -15,12 +15,12 @@ export const generateInvoiceHTML = (sale: Sale, businessInfo: any): string => {
 
   return `
     <div id="invoice" style="width: 100%; max-width: 800px; margin: 0 auto; padding: 20px; font-family: 'Tajawal', Arial, sans-serif; direction: rtl;">
-      <div style="text-align: center; margin-bottom: 20px;">
-        <h1 style="color: #1A3365; margin-bottom: 5px;">فاتورة مبيعات</h1>
-        <p style="color: #666; margin: 0;">${businessInfo.name}</p>
+      <div style="text-align: center; margin-bottom: 20px; background-color: #064420; color: white; padding: 15px; border-radius: 8px; background-image: linear-gradient(45deg, rgba(229, 160, 28, 0.2) 25%, transparent 25%, transparent 50%, rgba(229, 160, 28, 0.2) 50%, rgba(229, 160, 28, 0.2) 75%, transparent 75%); background-size: 10px 10px;">
+        <h1 style="color: white; margin-bottom: 5px;">فاتورة مبيعات</h1>
+        <p style="color: #f8f8f8; margin: 0;">${businessInfo.name}</p>
       </div>
       
-      <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
+      <div style="display: flex; justify-content: space-between; margin-bottom: 20px; background-color: #f8f7f2; padding: 15px; border-radius: 8px; border: 1px solid #e5a01c;">
         <div>
           <p><strong>العنوان:</strong> ${businessInfo.address}</p>
           <p><strong>الهاتف:</strong> ${businessInfo.phone}</p>
@@ -29,32 +29,33 @@ export const generateInvoiceHTML = (sale: Sale, businessInfo: any): string => {
         <div>
           <p><strong>رقم الفاتورة:</strong> ${sale.invoiceNumber}</p>
           <p><strong>التاريخ:</strong> ${formatDate(sale.date)}</p>
+          ${businessInfo.taxId ? `<p><strong>الرقم الضريبي:</strong> ${businessInfo.taxId}</p>` : ''}
         </div>
       </div>
       
-      <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+      <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px; border-radius: 8px; overflow: hidden; border: 1px solid #e5a01c;">
         <thead>
-          <tr style="background-color: #1A3365; color: white;">
-            <th style="padding: 10px; text-align: right; border: 1px solid #ddd;">#</th>
-            <th style="padding: 10px; text-align: right; border: 1px solid #ddd;">المنتج</th>
-            <th style="padding: 10px; text-align: right; border: 1px solid #ddd;">الكمية</th>
-            <th style="padding: 10px; text-align: right; border: 1px solid #ddd;">السعر</th>
-            <th style="padding: 10px; text-align: right; border: 1px solid #ddd;">المجموع</th>
+          <tr style="background-color: #064420; color: white;">
+            <th style="padding: 10px; text-align: right; border: 1px solid #e5a01c;">#</th>
+            <th style="padding: 10px; text-align: right; border: 1px solid #e5a01c;">المنتج</th>
+            <th style="padding: 10px; text-align: right; border: 1px solid #e5a01c;">الكمية</th>
+            <th style="padding: 10px; text-align: right; border: 1px solid #e5a01c;">السعر</th>
+            <th style="padding: 10px; text-align: right; border: 1px solid #e5a01c;">المجموع</th>
           </tr>
         </thead>
         <tbody>
           ${itemsHTML}
         </tbody>
         <tfoot>
-          <tr style="background-color: #f9f9f9;">
-            <td colspan="4" style="padding: 10px; text-align: left; border: 1px solid #ddd;"><strong>المجموع</strong></td>
-            <td style="padding: 10px; text-align: right; border: 1px solid #ddd;"><strong>${formatCurrency(sale.total)}</strong></td>
+          <tr style="background-color: #f8f7f2;">
+            <td colspan="4" style="padding: 10px; text-align: left; border: 1px solid #e5a01c;"><strong>المجموع</strong></td>
+            <td style="padding: 10px; text-align: right; border: 1px solid #e5a01c;"><strong>${formatCurrency(sale.total)}</strong></td>
           </tr>
         </tfoot>
       </table>
       
-      <div style="text-align: center; margin-top: 40px; color: #666;">
-        <p>شكراً لتعاملكم معنا!</p>
+      <div style="text-align: center; margin-top: 40px; color: #064420; padding: 15px; border-top: 2px dashed #e5a01c;">
+        <p>${businessInfo.invoiceNotes || 'شكراً لتعاملكم معنا!'}</p>
         <p>نظام Aura POS</p>
       </div>
     </div>

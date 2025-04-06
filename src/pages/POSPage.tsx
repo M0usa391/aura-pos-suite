@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -12,8 +13,8 @@ import { toast } from 'sonner';
 // Business info for the invoice
 const businessInfo = {
   name: 'متجر Aura',
-  address: 'شارع الملك فهد، الرياض، المملكة العربية السعودية',
-  phone: '+966 11 234 5678',
+  address: 'طرابلس، ليبيا',
+  phone: '+218 91 234 5678',
   email: 'info@aurapos.com',
 };
 
@@ -56,11 +57,9 @@ const POSPage: React.FC = () => {
       return;
     }
     
+    // تعديل هنا لإصلاح خطأ TypeScript
     const saleResult = completeSale();
-    
-    // Instead of checking if saleResult is truthy, we'll just use it directly
-    // since we know completeSale was called and should have processed the sale
-    setCurrentSale(saleResult || null);
+    setCurrentSale(saleResult);
     setShowCompleteSaleDialog(true);
     toast.success('تمت عملية البيع بنجاح');
   };
@@ -92,15 +91,16 @@ const POSPage: React.FC = () => {
 
   return (
     <div className="container mx-auto pb-16 pt-6">
+      <h1 className="text-2xl font-bold text-primary mb-6">نقطة البيع</h1>
       <div className="flex flex-col lg:flex-row gap-4">
         {/* Products Section */}
         <div className="w-full lg:w-2/3 space-y-4">
-          <Card>
-            <CardHeader className="pb-2">
+          <Card className="libyan-border">
+            <CardHeader className="libyan-header pb-2">
               <div className="flex flex-col md:flex-row justify-between gap-4">
-                <CardTitle>المنتجات</CardTitle>
+                <CardTitle className="text-white">المنتجات</CardTitle>
                 <Input
-                  className="max-w-xs"
+                  className="max-w-xs bg-white/90"
                   placeholder="بحث عن منتج..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
@@ -109,12 +109,12 @@ const POSPage: React.FC = () => {
             </CardHeader>
             <CardContent className="p-0">
               <Tabs defaultValue="all" className="w-full">
-                <div className="border-b px-6">
+                <div className="border-b px-6 bg-secondary/10">
                   <TabsList className="h-12">
                     <TabsTrigger
                       value="all"
                       onClick={() => setActiveCategory('all')}
-                      className="rounded-none data-[state=active]:border-b-2 data-[state=active]:border-aura-gold"
+                      className="rounded-none data-[state=active]:border-b-2 data-[state=active]:border-secondary"
                     >
                       الكل
                     </TabsTrigger>
@@ -124,7 +124,7 @@ const POSPage: React.FC = () => {
                         key={category.id}
                         value={category.id}
                         onClick={() => setActiveCategory(category.id)}
-                        className="rounded-none data-[state=active]:border-b-2 data-[state=active]:border-aura-gold"
+                        className="rounded-none data-[state=active]:border-b-2 data-[state=active]:border-secondary"
                       >
                         {category.name}
                       </TabsTrigger>
@@ -168,7 +168,7 @@ const POSPage: React.FC = () => {
                             <div className="text-sm text-gray-500 truncate">
                               {product.id}
                             </div>
-                            <div className="mt-1 font-bold text-aura-darkBlue">
+                            <div className="mt-1 font-bold text-primary">
                               {formatCurrency(product.price)}
                             </div>
                             <div className="text-xs mt-1">
@@ -226,7 +226,7 @@ const POSPage: React.FC = () => {
                               <div className="text-sm text-gray-500 truncate">
                                 {product.id}
                               </div>
-                              <div className="mt-1 font-bold text-aura-darkBlue">
+                              <div className="mt-1 font-bold text-primary">
                                 {formatCurrency(product.price)}
                               </div>
                               <div className="text-xs mt-1">
@@ -254,11 +254,11 @@ const POSPage: React.FC = () => {
         
         {/* Cart Section */}
         <div className="w-full lg:w-1/3">
-          <Card className="sticky top-6">
-            <CardHeader>
-              <CardTitle className="flex justify-between items-center">
+          <Card className="sticky top-6 libyan-border">
+            <CardHeader className="libyan-header">
+              <CardTitle className="flex justify-between items-center text-white">
                 <span>سلة المشتريات</span>
-                <span className="text-sm text-aura-gold">
+                <span className="text-sm text-white/80">
                   {cart.length} منتج
                 </span>
               </CardTitle>
@@ -269,7 +269,7 @@ const POSPage: React.FC = () => {
                   {cart.map((item) => (
                     <div
                       key={item.product.id}
-                      className="flex justify-between items-center border-b border-gray-100 pb-4"
+                      className="flex justify-between items-center border-b border-secondary/30 pb-4"
                     >
                       <div className="flex items-center">
                         <div className="w-12 h-12 bg-gray-100 rounded-md flex items-center justify-center ml-3">
@@ -322,16 +322,16 @@ const POSPage: React.FC = () => {
                 </div>
               )}
             </CardContent>
-            <CardFooter className="flex flex-col space-y-4">
+            <CardFooter className="flex flex-col space-y-4 bg-secondary/10 rounded-b-md p-4">
               <div className="w-full flex justify-between text-lg font-bold">
                 <span>المجموع:</span>
-                <span>{formatCurrency(cartTotal)}</span>
+                <span className="text-primary">{formatCurrency(cartTotal)}</span>
               </div>
               
               <div className="flex gap-2 w-full">
                 <Button
                   variant="outline"
-                  className="w-1/2"
+                  className="w-1/2 border-primary text-primary"
                   onClick={() => clearCart()}
                   disabled={cart.length === 0}
                 >
@@ -340,7 +340,7 @@ const POSPage: React.FC = () => {
                 </Button>
                 
                 <Button
-                  className="w-1/2 bg-aura-gold hover:bg-aura-gold/90"
+                  className="w-1/2 bg-secondary hover:bg-secondary/90"
                   onClick={handleCheckout}
                   disabled={cart.length === 0}
                 >
@@ -355,23 +355,23 @@ const POSPage: React.FC = () => {
       
       {/* Complete Sale Dialog */}
       <Dialog open={showCompleteSaleDialog} onOpenChange={setShowCompleteSaleDialog}>
-        <DialogContent className="max-w-md">
-          <DialogHeader>
-            <DialogTitle>تمت عملية البيع بنجاح</DialogTitle>
-            <DialogDescription>
+        <DialogContent className="max-w-md libyan-pattern">
+          <DialogHeader className="libyan-header rounded-t-lg">
+            <DialogTitle className="text-white">تمت عملية البيع بنجاح</DialogTitle>
+            <DialogDescription className="text-white/80">
               تمت عملية البيع بنجاح ويمكنك الآن طباعة الفاتورة أو تحميلها.
             </DialogDescription>
           </DialogHeader>
           
           <div className="py-4 text-center">
-            <div className="text-3xl font-bold text-aura-gold mb-2">
+            <div className="text-3xl font-bold text-secondary mb-2">
               {currentSale && formatCurrency(currentSale.total)}
             </div>
             <div className="text-sm text-gray-500 mb-4">
               {currentSale && currentSale.invoiceNumber}
             </div>
             
-            <div className="p-4 bg-gray-50 rounded-md mb-4">
+            <div className="p-4 bg-primary/10 rounded-md mb-4 border border-primary/20">
               <div className="text-sm text-gray-600 mb-2">
                 الربح من هذه العملية:
               </div>
@@ -384,7 +384,7 @@ const POSPage: React.FC = () => {
           <DialogFooter className="flex flex-col sm:flex-row gap-2">
             <Button
               variant="outline"
-              className="w-full sm:w-auto"
+              className="w-full sm:w-auto border-primary text-primary"
               onClick={handlePrintInvoice}
             >
               <i className="bi bi-printer ml-2"></i>
@@ -392,7 +392,7 @@ const POSPage: React.FC = () => {
             </Button>
             
             <Button
-              className="w-full sm:w-auto bg-aura-gold hover:bg-aura-gold/90"
+              className="w-full sm:w-auto bg-secondary hover:bg-secondary/90"
               onClick={handleDownloadInvoice}
             >
               <i className="bi bi-download ml-2"></i>
