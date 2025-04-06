@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -364,51 +365,54 @@ const StatisticsPage: React.FC = () => {
             <CardTitle>تحليل المبيعات</CardTitle>
           </CardHeader>
           <CardContent>
-            <TabsContent value="daily" forceMount className={period === 'daily' ? 'block' : 'hidden'}>
-              <div className="h-[300px]">
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={dailyData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="hour" />
-                    <YAxis />
-                    <Tooltip formatter={formatTooltip} />
-                    <Bar dataKey="sales" name="المبيعات" fill="#D4AF37" />
-                    <Bar dataKey="profit" name="الأرباح" fill="#1A3365" />
-                  </BarChart>
-                </ResponsiveContainer>
-              </div>
-            </TabsContent>
-            
-            <TabsContent value="weekly" forceMount className={period === 'weekly' ? 'block' : 'hidden'}>
-              <div className="h-[300px]">
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={weeklyData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="day" />
-                    <YAxis />
-                    <Tooltip formatter={formatTooltip} />
-                    <Bar dataKey="sales" name="المبيعات" fill="#D4AF37" />
-                    <Bar dataKey="profit" name="الأرباح" fill="#1A3365" />
-                  </BarChart>
-                </ResponsiveContainer>
-              </div>
-            </TabsContent>
-            
-            <TabsContent value="monthly" forceMount className={period === 'monthly' ? 'block' : 'hidden'}>
-              <div className="h-[300px]">
-                <ResponsiveContainer width="100%" height="100%">
-                  <LineChart data={monthlyData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="date" />
-                    <YAxis />
-                    <Tooltip formatter={formatTooltip} />
-                    <Legend />
-                    <Line type="monotone" dataKey="sales" name="المبيعات" stroke="#D4AF37" strokeWidth={2} />
-                    <Line type="monotone" dataKey="profit" name="الأرباح" stroke="#1A3365" strokeWidth={2} />
-                  </LineChart>
-                </ResponsiveContainer>
-              </div>
-            </TabsContent>
+            {/* Wrap all TabsContent components with a Tabs component */}
+            <Tabs value={period} className="w-full">
+              <TabsContent value="daily">
+                <div className="h-[300px]">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={dailyData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="hour" />
+                      <YAxis />
+                      <Tooltip formatter={formatTooltip} />
+                      <Bar dataKey="sales" name="المبيعات" fill="#D4AF37" />
+                      <Bar dataKey="profit" name="الأرباح" fill="#1A3365" />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+              </TabsContent>
+              
+              <TabsContent value="weekly">
+                <div className="h-[300px]">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={weeklyData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="day" />
+                      <YAxis />
+                      <Tooltip formatter={formatTooltip} />
+                      <Bar dataKey="sales" name="المبيعات" fill="#D4AF37" />
+                      <Bar dataKey="profit" name="الأرباح" fill="#1A3365" />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+              </TabsContent>
+              
+              <TabsContent value="monthly">
+                <div className="h-[300px]">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <LineChart data={monthlyData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="date" />
+                      <YAxis />
+                      <Tooltip formatter={formatTooltip} />
+                      <Legend />
+                      <Line type="monotone" dataKey="sales" name="المبيعات" stroke="#D4AF37" strokeWidth={2} />
+                      <Line type="monotone" dataKey="profit" name="الأرباح" stroke="#1A3365" strokeWidth={2} />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </div>
+              </TabsContent>
+            </Tabs>
           </CardContent>
         </Card>
         
