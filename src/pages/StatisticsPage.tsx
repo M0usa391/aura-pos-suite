@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -45,14 +44,11 @@ const StatisticsPage: React.FC = () => {
   const COLORS = ['#D4AF37', '#1A3365', '#F5E7C1', '#0A1F44', '#F8F5E4', '#998542', '#6B7AA1'];
   
   useEffect(() => {
-    // Process daily data for the selected date
     const processDailyData = () => {
       const dailySales = getDailySales(sales, currentDate);
       
-      // Create hourly buckets
       const hourlyData: Record<number, { hour: string; sales: number; profit: number }> = {};
       
-      // Initialize all hours
       for (let i = 0; i < 24; i++) {
         hourlyData[i] = {
           hour: `${i}:00`,
@@ -61,7 +57,6 @@ const StatisticsPage: React.FC = () => {
         };
       }
       
-      // Fill in data
       dailySales.forEach((sale) => {
         const saleHour = new Date(sale.date).getHours();
         hourlyData[saleHour].sales += sale.total;
@@ -71,18 +66,14 @@ const StatisticsPage: React.FC = () => {
       setDailyData(Object.values(hourlyData));
     };
     
-    // Process weekly data for the current week
     const processWeeklyData = () => {
       const weeklySales = getWeeklySales(sales, currentDate);
       
-      // Create daily buckets
       const dailyData: Record<number, { day: string; sales: number; profit: number }> = {};
       
-      // Get start of week (Sunday)
       const startOfWeek = new Date(currentDate);
       startOfWeek.setDate(currentDate.getDate() - currentDate.getDay());
       
-      // Initialize all days
       const dayNames = ['الأحد', 'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
       
       for (let i = 0; i < 7; i++) {
@@ -96,7 +87,6 @@ const StatisticsPage: React.FC = () => {
         };
       }
       
-      // Fill in data
       weeklySales.forEach((sale) => {
         const saleDate = new Date(sale.date);
         const dayOfWeek = saleDate.getDay();
@@ -108,17 +98,13 @@ const StatisticsPage: React.FC = () => {
       setWeeklyData(Object.values(dailyData));
     };
     
-    // Process monthly data for the selected month
     const processMonthlyData = () => {
       const monthlySales = getMonthlySales(sales, currentMonth, currentYear);
       
-      // Create daily buckets
       const dailyData: Record<number, { date: string; sales: number; profit: number }> = {};
       
-      // Get number of days in month
       const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
       
-      // Initialize all days
       for (let i = 1; i <= daysInMonth; i++) {
         const date = new Date(currentYear, currentMonth, i);
         
@@ -129,7 +115,6 @@ const StatisticsPage: React.FC = () => {
         };
       }
       
-      // Fill in data
       monthlySales.forEach((sale) => {
         const saleDate = new Date(sale.date);
         const dayOfMonth = saleDate.getDate();
@@ -141,11 +126,9 @@ const StatisticsPage: React.FC = () => {
       setMonthlyData(Object.values(dailyData));
     };
     
-    // Process category data
     const processCategoryData = () => {
       const categorySales: Record<string, { name: string; value: number }> = {};
       
-      // Initialize all categories
       products.forEach((product) => {
         if (!categorySales[product.category]) {
           categorySales[product.category] = {
@@ -155,7 +138,6 @@ const StatisticsPage: React.FC = () => {
         }
       });
       
-      // Fill in data
       sales.forEach((sale) => {
         sale.items.forEach((item) => {
           const category = item.product.category || 'غير مصنف';
@@ -180,7 +162,6 @@ const StatisticsPage: React.FC = () => {
     processCategoryData();
   }, [sales, products, currentDate, currentMonth, currentYear]);
   
-  // Navigate to previous day/week/month
   const handlePrevious = () => {
     if (period === 'daily') {
       const newDate = new Date(currentDate);
@@ -198,7 +179,6 @@ const StatisticsPage: React.FC = () => {
     }
   };
   
-  // Navigate to next day/week/month
   const handleNext = () => {
     if (period === 'daily') {
       const newDate = new Date(currentDate);
@@ -216,7 +196,6 @@ const StatisticsPage: React.FC = () => {
     }
   };
   
-  // Reset to current day/week/month
   const handleToday = () => {
     if (period === 'daily' || period === 'weekly') {
       setCurrentDate(new Date());
@@ -226,7 +205,6 @@ const StatisticsPage: React.FC = () => {
     }
   };
   
-  // Get period label
   const getPeriodLabel = (): string => {
     if (period === 'daily') {
       return new Intl.DateTimeFormat('ar-SA', {
@@ -257,7 +235,6 @@ const StatisticsPage: React.FC = () => {
     }
   };
   
-  // Get total sales for the current period
   const getPeriodSales = (): number => {
     if (period === 'daily') {
       const dailySales = getDailySales(sales, currentDate);
@@ -271,7 +248,6 @@ const StatisticsPage: React.FC = () => {
     }
   };
   
-  // Get total profit for the current period
   const getPeriodProfit = (): number => {
     if (period === 'daily') {
       const dailySales = getDailySales(sales, currentDate);
@@ -285,7 +261,6 @@ const StatisticsPage: React.FC = () => {
     }
   };
   
-  // Get top selling products for the current period
   const getTopProductsForPeriod = (): { product: string; quantity: number }[] => {
     if (period === 'daily') {
       const dailySales = getDailySales(sales, currentDate);
@@ -299,7 +274,6 @@ const StatisticsPage: React.FC = () => {
     }
   };
   
-  // Format chart tooltip
   const formatTooltip = (value: number): string => {
     return formatCurrency(value);
   };
@@ -336,7 +310,6 @@ const StatisticsPage: React.FC = () => {
         </div>
       </div>
       
-      {/* Stats Summary */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
         <Card>
           <CardHeader className="pb-2">
@@ -385,14 +358,13 @@ const StatisticsPage: React.FC = () => {
         </Card>
       </div>
       
-      {/* Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
         <Card>
           <CardHeader>
             <CardTitle>تحليل المبيعات</CardTitle>
           </CardHeader>
           <CardContent>
-            <TabsContent value="daily" forceMount={period === 'daily'} className={period === 'daily' ? 'block' : 'hidden'}>
+            <TabsContent value="daily" forceMount className={period === 'daily' ? 'block' : 'hidden'}>
               <div className="h-[300px]">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={dailyData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
@@ -407,7 +379,7 @@ const StatisticsPage: React.FC = () => {
               </div>
             </TabsContent>
             
-            <TabsContent value="weekly" forceMount={period === 'weekly'} className={period === 'weekly' ? 'block' : 'hidden'}>
+            <TabsContent value="weekly" forceMount className={period === 'weekly' ? 'block' : 'hidden'}>
               <div className="h-[300px]">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={weeklyData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
@@ -422,7 +394,7 @@ const StatisticsPage: React.FC = () => {
               </div>
             </TabsContent>
             
-            <TabsContent value="monthly" forceMount={period === 'monthly'} className={period === 'monthly' ? 'block' : 'hidden'}>
+            <TabsContent value="monthly" forceMount className={period === 'monthly' ? 'block' : 'hidden'}>
               <div className="h-[300px]">
                 <ResponsiveContainer width="100%" height="100%">
                   <LineChart data={monthlyData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
@@ -470,7 +442,6 @@ const StatisticsPage: React.FC = () => {
         </Card>
       </div>
       
-      {/* Top Products */}
       <Card>
         <CardHeader>
           <CardTitle>أفضل المنتجات مبيعاً</CardTitle>

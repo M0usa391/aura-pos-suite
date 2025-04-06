@@ -57,10 +57,11 @@ const POSPage: React.FC = () => {
       return;
     }
     
-    const sale = completeSale();
+    const saleResult = completeSale();
     
-    if (sale) {
-      setCurrentSale(sale);
+    // Check if sale was completed successfully
+    if (saleResult) {
+      setCurrentSale(saleResult);
       setShowCompleteSaleDialog(true);
       toast.success('تمت عملية البيع بنجاح');
     }
