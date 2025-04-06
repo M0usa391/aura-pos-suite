@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -58,11 +57,9 @@ const POSPage: React.FC = () => {
     }
     
     const saleResult = completeSale();
-    if (saleResult) {
-      setCurrentSale(saleResult);
-      setShowCompleteSaleDialog(true);
-      toast.success('تمت عملية البيع بنجاح');
-    }
+    setCurrentSale(saleResult);
+    setShowCompleteSaleDialog(true);
+    toast.success('تمت عملية البيع بنجاح');
   };
   
   // Handle increase/decrease quantity
